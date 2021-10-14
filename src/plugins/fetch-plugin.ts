@@ -19,15 +19,16 @@ export const fetchPlugin: (inputCode: string) => esbuild.Plugin = (
         };
       });
 
-      build.onLoad({ filter: /.css$/ }, async (args: esbuild.OnLoadArgs) => {
+      build.onLoad({ filter: /.*/ }, async (args) => {
         // if the file is cached, then return it.
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
         );
 
         if (cachedResult) return cachedResult;
+      });
 
-        // Otherwise fetch the file from unpkg, cache it and return it.
+      build.onLoad({ filter: /.css$/ }, async (args: esbuild.OnLoadArgs) => {
         const { data, request } = await axios.get<string>(args.path);
 
         const escaped = data
@@ -53,14 +54,6 @@ export const fetchPlugin: (inputCode: string) => esbuild.Plugin = (
       });
 
       build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
-        // if the file is cached, then return it.
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-
-        if (cachedResult) return cachedResult;
-
-        // Otherwise fetch the file from unpkg, cache it and return it.
         const { data, request } = await axios.get<string>(args.path);
         const result: esbuild.OnLoadResult = {
           loader: "jsx",
