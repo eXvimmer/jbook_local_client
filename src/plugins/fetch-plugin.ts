@@ -12,14 +12,14 @@ export const fetchPlugin: (inputCode: string) => esbuild.Plugin = (
   return {
     name: "fetch-plugin",
     setup(build: esbuild.PluginBuild) {
-      build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
-        if (args.path === "index.js") {
-          return {
-            loader: "jsx",
-            contents: inputCode,
-          };
-        }
+      build.onLoad({ filter: /^index\.js$/ }, () => {
+        return {
+          loader: "jsx",
+          contents: inputCode,
+        };
+      });
 
+      build.onLoad({ filter: /.css$/ }, async (args: esbuild.OnLoadArgs) => {
         // if the file is cached, then return it.
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
@@ -27,9 +27,41 @@ export const fetchPlugin: (inputCode: string) => esbuild.Plugin = (
 
         if (cachedResult) return cachedResult;
 
-        // otherwise fetch the file from unpkg, cache it and return it.
-        const { data, request } = await axios.get(args.path);
+        // Otherwise fetch the file from unpkg, cache it and return it.
+        const { data, request } = await axios.get<string>(args.path);
 
+        const escaped = data
+          .replace(/\n/g, "")
+          .replace(/"/g, '\\"')
+          .replace(/'/g, "\\'");
+
+        const contents = `
+          const style = document.createElement("style");
+          style.innerText = "${escaped}";
+          document.head.appendChild(style);
+        `;
+
+        const result: esbuild.OnLoadResult = {
+          loader: "jsx",
+          contents,
+          resolveDir: new URL("./", request.responseURL).pathname,
+        };
+
+        await fileCache.setItem(args.path, result);
+
+        return result;
+      });
+
+      build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
+        // if the file is cached, then return it.
+        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
+          args.path
+        );
+
+        if (cachedResult) return cachedResult;
+
+        // Otherwise fetch the file from unpkg, cache it and return it.
+        const { data, request } = await axios.get<string>(args.path);
         const result: esbuild.OnLoadResult = {
           loader: "jsx",
           contents: data,
