@@ -5,8 +5,33 @@ import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
 function App() {
   const ref = useRef<esbuild.Service | null>(null);
+  const iframe = useRef<HTMLIFrameElement>(null);
   const [input, setInput] = useState("");
-  const [code, setCode] = useState("");
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Code Sandbox</title>
+    </head>
+    <body>
+     <div id="root"></div> 
+     <script>
+      window.addEventListener("message", (e) => {
+        try {
+          eval(e.data);
+        } catch (err) {
+          const root = document.getElementById('root');
+          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+          console.error(err);
+        }
+      }, false);
+     </script>
+    </body>
+    </html>
+  `;
 
   const startService = async () => {
     ref.current = await esbuild.startService({
@@ -17,6 +42,11 @@ function App() {
 
   useEffect(() => {
     startService();
+
+    // cleanup
+    return () => {
+      ref.current && ref.current.stop();
+    };
   }, []);
 
   const onTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -25,6 +55,9 @@ function App() {
 
   const onButtonClick = async () => {
     if (!ref.current) return;
+
+    // refresh the content of the iframe.
+    if (iframe.current) iframe.current.srcdoc = html;
 
     const result = await ref.current.build({
       entryPoints: ["index.js"],
@@ -37,7 +70,9 @@ function App() {
       },
     });
 
-    result.outputFiles ? setCode(result.outputFiles[0].text) : setCode("");
+    // result.outputFiles ? setCode(result.outputFiles[0].text) : setCode("");
+    // result.outputFiles && setCode(result.outputFiles[0].text);
+    iframe.current?.contentWindow?.postMessage(result.outputFiles[0].text, "*");
   };
 
   return (
@@ -46,7 +81,12 @@ function App() {
       <div>
         <button onClick={onButtonClick}>Submit</button>
       </div>
-      <pre>{code}</pre>
+      <iframe
+        ref={iframe}
+        srcDoc={html}
+        sandbox="allow-scripts"
+        title="code sandbox"
+      />
     </div>
   );
 }
