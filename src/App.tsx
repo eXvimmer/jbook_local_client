@@ -1,5 +1,6 @@
 import * as esbuild from "esbuild-wasm";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import CodeEditor from "./components/CodeEditor";
 import { fetchPlugin } from "./plugins/fetch-plugin";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
@@ -77,6 +78,7 @@ function App() {
 
   return (
     <div>
+      <CodeEditor />
       <textarea value={input} onChange={onTextAreaChange}></textarea>
       <div>
         <button onClick={onButtonClick}>Submit</button>
