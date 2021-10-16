@@ -1,3 +1,4 @@
+import "./Preview.css";
 import { FC, useEffect, useRef } from "react";
 
 const html = `
@@ -7,6 +8,7 @@ const html = `
       <meta charset="UTF-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <title>Code Sandbox</title>
+      <style>html {background-color: white;}</style>
     </head>
     <body>
      <div id="root"></div> 
@@ -39,12 +41,14 @@ const Preview: FC<PreviewProps> = ({ code }) => {
   }, [code]);
 
   return (
-    <iframe
-      title="Code Sandbox"
-      ref={iframe}
-      srcDoc={html}
-      sandbox="allow-scripts"
-    />
+    <div className="preview-wrapper">
+      <iframe
+        title="Code Sandbox"
+        ref={iframe}
+        srcDoc={html}
+        sandbox="allow-scripts"
+      />
+    </div>
   );
 };
 
