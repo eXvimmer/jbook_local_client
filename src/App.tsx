@@ -78,7 +78,7 @@ function App() {
 
   return (
     <div>
-      <CodeEditor />
+      <CodeEditor initialValue="// hi" onChange={(value) => setInput(value)} />
       <textarea value={input} onChange={onTextAreaChange}></textarea>
       <div>
         <button onClick={onButtonClick}>Submit</button>
