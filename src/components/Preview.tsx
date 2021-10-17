@@ -37,7 +37,10 @@ const Preview: FC<PreviewProps> = ({ code }) => {
   useEffect(() => {
     // refresh the content of the iframe.
     if (iframe.current) iframe.current.srcdoc = html;
-    iframe.current?.contentWindow?.postMessage(code, "*");
+
+    setTimeout(() => {
+      iframe.current?.contentWindow?.postMessage(code, "*");
+    }, 50);
   }, [code]);
 
   return (
