@@ -10,6 +10,7 @@ interface ResizableProps {
 const Resizable: FC<ResizableProps> = ({ direction, children }) => {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const [width, setWidth] = useState(window.innerWidth * 0.75);
 
   useEffect(() => {
     // deboucing
@@ -23,13 +24,18 @@ const Resizable: FC<ResizableProps> = ({ direction, children }) => {
       timer = setTimeout(() => {
         setInnerWidth(window.innerWidth);
         setInnerHeight(window.innerHeight);
+
+        // fixing the min and maxConstraints bug
+        if (window.innerWidth * 0.75 < width) {
+          setWidth(window.innerWidth * 0.75);
+        }
       }, 100);
     };
 
     window.addEventListener("resize", listener);
 
     return () => window.removeEventListener("resize", listener);
-  }, []);
+  }, [width]);
 
   let resizableProps: ResizableBoxProps;
 
@@ -39,8 +45,11 @@ const Resizable: FC<ResizableProps> = ({ direction, children }) => {
       minConstraints: [innerWidth * 0.2, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
       height: Infinity,
-      width: innerWidth * 0.75,
+      width,
       resizeHandles: ["e"],
+      onResizeStop: (_event, data) => {
+        setWidth(data.size.width);
+      },
     };
   } else {
     resizableProps = {
