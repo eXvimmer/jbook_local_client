@@ -13,13 +13,24 @@ const html = `
     <body>
      <div id="root"></div> 
      <script>
+      // General Error Handling Function
+      const handleError = err => {
+        const root = document.getElementById('root');
+        root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+        console.error(err);
+      }
+
+      // Error handler for Async Code
+      window.addEventListener("error", (e) => {
+        e.preventDefault();
+        handleError(e.error);
+      });
+
       window.addEventListener("message", (e) => {
         try {
           eval(e.data);
         } catch (err) {
-          const root = document.getElementById('root');
-          root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
-          console.error(err);
+          handleError(err);
         }
       }, false);
      </script>
@@ -29,9 +40,10 @@ const html = `
 
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
-const Preview: FC<PreviewProps> = ({ code }) => {
+const Preview: FC<PreviewProps> = ({ code, err }) => {
   const iframe = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -51,6 +63,7 @@ const Preview: FC<PreviewProps> = ({ code }) => {
         srcDoc={html}
         sandbox="allow-scripts"
       />
+      {err && <div className="preview-error">{err}</div>}
     </div>
   );
 };
