@@ -1,19 +1,24 @@
 import { ActionType } from "../action-types";
 import { CellTypes } from "../cell";
 
-interface MoveCellAction {
+export interface MoveCellAction {
   type: ActionType.MOVE_CELL;
   /** where to move the cell */
-  payload: "up" | "down";
+  payload: {
+    /** id of the cell that should be moved */
+    id: string;
+    /** where to move the cell */
+    direction: "up" | "down"; // TODO: change to a type
+  };
 }
 
-interface DeleteCellAction {
+export interface DeleteCellAction {
   type: ActionType.DELETE_CELL;
   /** id of the cell that should be deleted */
   payload: string;
 }
 
-interface UpdateCellAction {
+export interface UpdateCellAction {
   type: ActionType.UPDATE_CELL;
   payload: {
     /** id of the cell that should be updated */
@@ -23,7 +28,7 @@ interface UpdateCellAction {
   };
 }
 
-interface InsertCellBeforeAction {
+export interface InsertCellBeforeAction {
   type: ActionType.INSERT_CELL_BEFORE;
   payload: {
     /** cell id that the new cell should be inserted before */
