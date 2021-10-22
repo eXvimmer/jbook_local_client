@@ -34,7 +34,7 @@ export interface InsertCellBeforeAction {
   type: ActionType.INSERT_CELL_BEFORE;
   payload: {
     /** cell id that the new cell should be inserted before */
-    id: string;
+    id: string | null;
     /** new cell type */
     type: CellTypes;
   };
