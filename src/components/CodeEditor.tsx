@@ -1,7 +1,7 @@
 import "./CodeEditor.css";
 import "./syntax.css";
 
-import { FC, useRef } from "react";
+import { useRef } from "react";
 import MonacoEditor, { EditorDidMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
@@ -13,7 +13,7 @@ interface CodeEditorProps {
   onChange(value: string): void;
 }
 
-const CodeEditor: FC<CodeEditorProps> = ({ initialValue, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const editorRef = useRef<any>(null); // TODO: change any
 
   const onEditorDidMount: EditorDidMount = (getEditorValue, editor) => {
