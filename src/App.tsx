@@ -1,12 +1,12 @@
 import { Provider } from "react-redux";
-import TextEditor from "./components/TextEditor";
+import CellList from "./components/CellList";
 import { store } from "./state";
 
 function App() {
   return (
     <Provider store={store}>
       <div>
-        <TextEditor />
+        <CellList />
       </div>
     </Provider>
   );
