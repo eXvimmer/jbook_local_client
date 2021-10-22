@@ -1,3 +1,6 @@
+import "./CellListItem.css";
+
+import { Fragment } from "react";
 import { Cell } from "../state";
 import ActionBar from "./ActionBar";
 import CodeCell from "./CodeCell";
@@ -10,17 +13,20 @@ interface CellListItemProps {
 const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
   const child =
     cell.type === "code" ? (
-      <CodeCell cell={cell} />
+      <Fragment>
+        <div className="action-bar-wrapper">
+          <ActionBar id={cell.id} />
+        </div>
+        <CodeCell cell={cell} />
+      </Fragment>
     ) : (
-      <TextEditor cell={cell} />
+      <Fragment>
+        <TextEditor cell={cell} />
+        <ActionBar id={cell.id} />
+      </Fragment>
     );
 
-  return (
-    <div>
-      <ActionBar id={cell.id} />
-      {child}
-    </div>
-  );
+  return <div className="cell-list-item">{child}</div>;
 };
 
 export default CellListItem;
