@@ -1,6 +1,8 @@
 import { ActionType } from "../action-types";
 import { CellTypes } from "../cell";
 
+export type Direction = "up" | "down";
+
 export interface MoveCellAction {
   type: ActionType.MOVE_CELL;
   /** where to move the cell */
@@ -8,7 +10,7 @@ export interface MoveCellAction {
     /** id of the cell that should be moved */
     id: string;
     /** where to move the cell */
-    direction: "up" | "down"; // TODO: change to a type
+    direction: Direction;
   };
 }
 

@@ -24,13 +24,23 @@ const reducer: Reducer<CellsState, Action> = (
   action
 ) => {
   switch (action.type) {
-    // TODO: modify all of the return types
     case ActionType.MOVE_CELL:
       return state;
     case ActionType.DELETE_CELL:
       return state;
     case ActionType.UPDATE_CELL:
-      return state;
+      const { id, content } = action.payload;
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [id]: {
+            ...state.data[id],
+            content,
+          },
+        },
+      };
     case ActionType.INSERT_CELL_BEFORE:
       return state;
     default:

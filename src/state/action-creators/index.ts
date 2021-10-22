@@ -2,6 +2,7 @@ import { ActionCreator } from "redux";
 import { ActionType } from "../action-types";
 import {
   DeleteCellAction,
+  Direction,
   InsertCellBeforeAction,
   MoveCellAction,
   UpdateCellAction,
@@ -28,10 +29,9 @@ export const deleteCell: ActionCreator<DeleteCellAction> = (id: string) => {
   };
 };
 
-// TODO: change up | down to a type
 export const moveCell: ActionCreator<MoveCellAction> = (
   id: string,
-  direction: "up" | "down"
+  direction: Direction
 ) => {
   return {
     type: ActionType.MOVE_CELL,
