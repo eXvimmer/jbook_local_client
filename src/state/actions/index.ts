@@ -30,10 +30,10 @@ export interface UpdateCellAction {
   };
 }
 
-export interface InsertCellBeforeAction {
-  type: ActionType.INSERT_CELL_BEFORE;
+export interface InsertCellAfterAction {
+  type: ActionType.INSERT_CELL_AFTER;
   payload: {
-    /** cell id that the new cell should be inserted before */
+    /** cell id that the new cell should be inserted After */
     id: string | null;
     /** new cell type */
     type: CellTypes;
@@ -44,4 +44,4 @@ export type Action =
   | MoveCellAction
   | DeleteCellAction
   | UpdateCellAction
-  | InsertCellBeforeAction;
+  | InsertCellAfterAction;
