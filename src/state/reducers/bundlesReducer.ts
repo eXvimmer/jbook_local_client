@@ -3,11 +3,13 @@ import { ActionType } from "../action-types";
 import { Action } from "../actions";
 
 interface BundleState {
-  [key: string]: {
-    loading: boolean;
-    code: string;
-    err: string;
-  };
+  [key: string]:
+    | {
+        loading: boolean;
+        code: string;
+        err: string;
+      }
+    | undefined;
 }
 
 const initialState: BundleState = {};
@@ -22,6 +24,7 @@ const reducer = produce(
           err: "",
         };
         return state;
+
       case ActionType.BUNDLE_COMPLETE:
         state[action.payload.cellId] = {
           loading: false,
@@ -29,6 +32,7 @@ const reducer = produce(
           err: action.payload.bundle.err,
         };
         return state;
+
       default:
         return state;
     }
