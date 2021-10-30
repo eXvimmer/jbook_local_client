@@ -22,6 +22,26 @@ const initialState: CellsState = {
 // check the immer documentation
 const reducer = produce((state: CellsState = initialState, action: Action) => {
   switch (action.type) {
+    case ActionType.FETCH_CELLS:
+      state.loading = true;
+      state.error = null;
+      return state;
+
+    case ActionType.FETCH_CELLS_COMPLETE:
+      state.order = action.payload.map((cell) => cell.id);
+
+      state.data = action.payload.reduce((acc, cell) => {
+        acc[cell.id] = cell;
+        return acc;
+      }, {} as CellsState["data"]);
+
+      return state;
+
+    case ActionType.FETCH_CELLS_ERROR:
+      state.loading = false;
+      state.error = action.payload;
+      return state;
+
     case ActionType.MOVE_CELL:
       const { direction } = action.payload;
 
