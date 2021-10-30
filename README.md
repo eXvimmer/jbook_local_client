@@ -1,6 +1,6 @@
 # 🚀 JBook (client side)
 
-  Client side project of [React and Typescript: Build a Portfolio Project](https://www.udemy.com/course/react-and-typescript-build-a-portfolio-project/) course. To see the whole project (cli, local api and local client) visit [npm]() or the [Git repo](https://github.com/MadAitcH/jbook_complete).
+  Client side project of [React and Typescript: Build a Portfolio Project](https://www.udemy.com/course/react-and-typescript-build-a-portfolio-project/) course. To see the whole project (cli, local api and local client) visit [npm](https://www.npmjs.com/package/bronote) or [this Git repo](https://github.com/MadAitcH/jbook_complete).
 
 ## Technology used
 
@@ -17,7 +17,7 @@
 Download the zip file or Clone this repo, using:
 
 ```bash
-git clone https://github.com/MadAitcH/jbook_local_client
+git clone https://github.com/MadAitcH/jbook_local_client.git
 ```
 
 Install the dependencies:
