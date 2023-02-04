@@ -17,7 +17,7 @@
 Download the zip file or Clone this repo, using:
 
 ```bash
-git clone https://github.com/MadAitcH/jbook_local_client.git
+git clone https://github.com/eXvimmer/jbook_local_client.git
 ```
 
 Install the dependencies:
